@@ -1,0 +1,59 @@
+//C++ program for AI chatbot
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Response {
+    string keyword;
+    vector<string> responses;
+};
+string analyzeSentiment(const string& input) {
+    if (input.find("happy") != string::npos||input.find("good") != string::npos||input.find("fine") != string::npos|| input.find("strong") != string::npos|| input.find("joyful") != string::npos) {
+        return "positive";
+    } else if (input.find("sad") != string::npos || input.find("bad") != string::npos|| input.find("sad") != string::npos|| input.find("dead") != string::npos|| input.find("sick") != string::npos) {
+        return "negative";
+    }
+    return "neutral";
+}
+
+string generateResponse(const string& input) {
+    vector<Response> responses = {
+        {"how are you", {"I'm good, thank you!", "I'm doing well, how about you?"}},
+        {"weather", {"The weather is nice today.", "go ouside and touch grass."}},
+        {"bye", {"Goodbye!", "See you later!", "Take care!","Adios!","Sayonara!"}},
+        {"hi", {"Hello there"}},
+        {"hello", {"Hello there"}},
+        {"hey",{"Hello there, How are you?"}}
+    };
+    for (const auto& resp : responses) {
+        if (input.find(resp.keyword) != string::npos) {
+            return resp.responses[rand() % resp.responses.size()];
+        }
+    }
+    return "I'm sorry, I didn't understand that.";
+}
+
+int main() {
+    cout << "Welcome to the AI Chatbot! You can start chatting. Type 'exit' to end the conversation." << endl;
+    string input;
+    while (true) {
+        cout << "You: ";
+        getline(cin, input);
+        if (input == "exit") {
+            cout << "Chatbot: Goodbye! Have a great day." << endl;
+            break;
+        }
+        string sentiment = analyzeSentiment(input);
+        if (sentiment == "positive") {
+            cout << "Chatbot: That's great to hear!" << endl;
+        } else if (sentiment == "negative") {
+            cout << "Chatbot: I'm sorry to hear that. How can I assist you?" << endl;
+        } else {
+            string response = generateResponse(input);
+            cout << "Chatbot: " << response << endl;
+        }
+    }
+    return 0;
+}
